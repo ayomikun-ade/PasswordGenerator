@@ -12,13 +12,13 @@ const copyBtn = document.querySelector(".password-copy");
 const copied = document.querySelector(".copied");
 
 const strengthRating = document.querySelector(".rating-text");
-const strengthBars = document.querySelector(".bar");
+const strengthBars = document.querySelectorAll(".bar");
 
 slider.addEventListener("input", () => {
   length.textContent = slider.value;
 });
 
-generateBtn.addEventListener("click", () => {
+generateBtn.addEventListener("click", (event) => {
   event.preventDefault();
   passwordDisplay.textContent = generatePass();
 });
@@ -31,6 +31,7 @@ let symbols = "!@#$%^&*()<>?";
 function generatePass() {
   let genPass = "";
   let allChars = "";
+  let strength = 0;
 
   allChars += includeUppercase.checked ? uppercase : "";
   allChars += includeLowercase.checked ? lowercase : "";
@@ -47,7 +48,56 @@ function generatePass() {
     i++;
   }
 
+  strength += includeUppercase.checked ? 1 : 0;
+  strength += includeLowercase.checked ? 1 : 0;
+  strength += includeNumbers.checked ? 1 : 0;
+  strength += includeSymbols.checked ? 1 : 0;
+
+  strength += Math.min(Math.ceil(slider.value / 8), 1);
+
+  updateRatingBars(strength);
+
   return genPass;
+}
+
+function updateRatingBars(strength) {
+  strengthBars.forEach((bar) => {
+    bar.style.backgroundColor = "transparent";
+  });
+
+  for (let i = 0; i < strength; i++) {
+    strengthBars[i].style.backgroundColor = getBarColor(strength);
+  }
+
+  strengthRating.textContent = getStrengthRating(strength);
+}
+
+function getStrengthRating(strength) {
+  if (strength === 4) {
+    return "Very Strong";
+  } else if (strength >= 3) {
+    return "Strong";
+  } else if (strength <= 2) {
+    return "Moderate";
+  } else if (strength <= 1) {
+    return "Weak";
+  } else {
+    return "Very Weak";
+  }
+}
+
+function getBarColor(strength) {
+  if (strength === 4) {
+    return "var(--green)";
+  } else if (strength >= 3) {
+    return "var(--light-yellow)";
+  } else if (strength >= 2) {
+    return "var(--dark-orange)";
+  } else if (strength >= 1) {
+    return "var(--light-orange)";
+  } else {
+    return "var(--dark-gray)";
+  }
 }
 
 copyBtn.addEventListener("click", (event) => {
