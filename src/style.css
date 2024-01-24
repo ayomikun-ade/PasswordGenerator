@@ -209,3 +209,25 @@ h1 {
   border: 2px solid var(--half-white);
   background: none;
 }
+
+@media only screen and (max-width: 540px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+  .password-container,
+  .options-container {
+    width: 350px;
+  }
+  .password {
+    font-size: 1.8rem;
+  }
+
+  .text {
+    font-size: 1.05rem;
+  }
+
+  .strength-box,
+  .rating-text {
+    font-size: 1.1rem;
+  }
+}
